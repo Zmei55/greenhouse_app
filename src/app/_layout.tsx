@@ -8,14 +8,17 @@ import { store } from '@/redux/store';
 
 import '@/global.css';
 
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 SplashScreen.preventAutoHideAsync(); // Блокируем автоматическое отключение заставки
 
 const RootLayout = () => {
   const [loaded] = useFonts({
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     SpaceMono: require('@/assets/fonts/SpaceMono-Regular.ttf'),
   });
 
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     if (loaded) SplashScreen.hideAsync(); // Скрываем заставку, когда шрифты загружены
   }, [loaded]);
 
@@ -25,6 +28,7 @@ const RootLayout = () => {
     <Provider store={store}>
       <Stack>
         <Stack.Screen name="index" options={{ title: 'Теплица' }} />
+        <Stack.Screen name="settings" options={{ title: 'Настройки' }} />
       </Stack>
     </Provider>
   );
