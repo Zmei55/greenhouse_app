@@ -11,19 +11,18 @@ export default defineConfig({
   files: ['**/*.{js,ts,tsx}'],
   extends: [
     eslintJsPlugin.configs.recommended,
-    tseslintPlugin.configs.recommended,
+    tseslintPlugin.configs.recommendedTypeChecked,
   ],
   languageOptions: {
     globals: {
       ...globalsPlugin.node,
       ...globalsPlugin.browser,
     },
-    // parser: tseslintPlugin.parser,
-    // parserOptions: {
-    //   project: ['tsconfig.json', 'tsconfig.node.json'],
-    //   ecmaVersion: 'latest',
-    //   sourceType: 'module',
-    // },
+    parserOptions: {
+      project: ['tsconfig.json'],
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+    },
   },
   plugins: {
     '@typescript-eslint': tseslintPlugin.plugin,
@@ -61,4 +60,5 @@ export default defineConfig({
     '@typescript-eslint/prefer-enum-initializers': 'error',
     'react-hooks/exhaustive-deps': 'warn',
   },
+  ignores: ['**/.expo', '**/.vscode', 'node_modules/*'],
 });
