@@ -27,8 +27,7 @@ const RootLayout = () => {
   return (
     <Provider store={store}>
       <Stack>
-        <Stack.Screen name="index" options={{ title: 'Теплица' }} />
-        <Stack.Screen name="settings" options={{ title: 'Настройки' }} />
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       </Stack>
     </Provider>
   );
