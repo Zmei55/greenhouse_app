@@ -2,13 +2,13 @@ import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen'; // Заставка на экране во время зарузки приложения | настройка в app.json
 import { useEffect } from 'react';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider } from 'react-redux';
 
 import { store } from '@/redux/store';
 
 import '@/global.css';
 
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
 SplashScreen.preventAutoHideAsync(); // Блокируем автоматическое отключение заставки
 
 const RootLayout = () => {
@@ -18,7 +18,6 @@ const RootLayout = () => {
   });
 
   useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     if (loaded) SplashScreen.hideAsync(); // Скрываем заставку, когда шрифты загружены
   }, [loaded]);
 
@@ -26,9 +25,14 @@ const RootLayout = () => {
 
   return (
     <Provider store={store}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      </Stack>
+      <SafeAreaProvider>
+        <Stack>
+          <Stack.Screen
+            name="(tabs)"
+            options={{ headerShown: false, statusBarStyle: 'light' }}
+          />
+        </Stack>
+      </SafeAreaProvider>
     </Provider>
   );
 };
