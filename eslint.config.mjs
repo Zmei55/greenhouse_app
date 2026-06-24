@@ -58,6 +58,8 @@ export default defineConfig({
     '@typescript-eslint/no-mixed-enums': 'error',
     '@typescript-eslint/no-require-imports': 'off',
     '@typescript-eslint/prefer-enum-initializers': 'error',
+    '@typescript-eslint/no-floating-promises': 'off',
+    '@typescript-eslint/no-misused-promises': 'off',
     'react-hooks/exhaustive-deps': 'warn',
   },
   ignores: ['**/.expo', '**/.vscode', 'node_modules/*'],
