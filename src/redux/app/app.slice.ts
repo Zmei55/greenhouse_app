@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { TAppState } from '@/types';
+import { AppStateType } from '@/types';
 
-const initialState: TAppState = {
+const initialState: AppStateType = {
   isLogged: false,
 };
 
