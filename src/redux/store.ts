@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
 
 import appReducer from '@/redux/app/app.slice';
+import settingsReducer from '@/redux/settings/settings.slice';
 
 import { api } from '@/redux/app/api';
 
@@ -9,6 +10,7 @@ export const store = configureStore({
   reducer: {
     [api.reducerPath]: api.reducer,
     app: appReducer,
+    settings: settingsReducer,
   },
   devTools: process.env.NODE_ENV !== 'production',
   middleware: getDefaultMiddleware =>
