@@ -21,4 +21,11 @@ export enum PrimaryColor {
   DISABLED = '#1160fd82',
 }
 
+/** Цвета кнопок */
+export enum ButtonColor {
+  PRIMARY = '#115FFD',
+  ERROR = '#EC312F',
+  WARNING = '#ff6300',
+}
+
 export const BottomTabInset = Platform.select({ ios: 50, android: 80 }) ?? 0;
