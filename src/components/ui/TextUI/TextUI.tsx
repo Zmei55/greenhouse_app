@@ -1,17 +1,18 @@
 import { TintColor } from '@/constants/theme';
-import { FC } from 'react';
 import { StyleSheet, Text, TextProps } from 'react-native';
 
 interface TextUIProps extends TextProps {
-  variant?: 'default' | 'title' | 'subtitle';
+  variant?: 'default' | 'title' | 'subtitle' | 'caption';
+  textColor?: 'default' | 'error' | 'white' | 'disabled';
   italic?: boolean;
   bold?: boolean;
 }
 
-export const TextUI: FC<TextUIProps> = ({
+export const TextUI: React.FC<TextUIProps> = ({
   children,
   style,
   variant = 'default',
+  textColor = 'default',
   italic = false,
   bold = false,
   ...rest
@@ -23,6 +24,11 @@ export const TextUI: FC<TextUIProps> = ({
         variant === 'default' && styles.default,
         variant === 'subtitle' && styles.subtitle,
         variant === 'title' && styles.title,
+        variant === 'caption' && styles.caption,
+        textColor === 'default' && { color: TintColor.DEFAULT },
+        textColor === 'white' && { color: TintColor.DISABLED },
+        textColor === 'error' && { color: TintColor.ERROR },
+        textColor === 'disabled' && { color: TintColor.WHITE },
         italic ? { fontStyle: 'italic' } : undefined,
         bold ? { fontWeight: 'bold' } : undefined,
         style,
@@ -35,8 +41,9 @@ export const TextUI: FC<TextUIProps> = ({
 };
 
 const styles = StyleSheet.create({
-  text: { color: TintColor.DEFAULT },
+  text: {},
   default: { fontSize: 20 },
   subtitle: { fontSize: 28 },
   title: { fontSize: 36 },
+  caption: { fontSize: 14 },
 });
