@@ -4,7 +4,6 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { StyleSheet } from 'react-native';
 
 import { ButtonUI, InputUI, StackUI, SwitchUI, TextUI } from '@/components/ui';
-import { ButtonColor } from '@/constants/theme';
 import { useSettingsSend } from '@/hooks';
 import { SettingsFormType, SettingsType } from '@/types/settings.types';
 
@@ -53,17 +52,17 @@ export const SettingsForm: FC<SettingsFormProps> = ({ settings }) => {
         <TextUI variant="subtitle">Датчики:</TextUI>
         <StackUI style={styles.sensor} spacing={2}>
           <TextUI>Термометр:</TextUI>
-          <SwitchUI value={false} />
+          <SwitchUI<SettingsFormType> name="temperature" control={control} />
         </StackUI>
 
         <StackUI style={styles.sensor} spacing={2}>
           <TextUI>Влажность воздуха:</TextUI>
-          <SwitchUI value={false} />
+          <SwitchUI<SettingsFormType> name="soilMoisture" control={control} />
         </StackUI>
 
         <StackUI style={styles.sensor} spacing={2}>
           <TextUI>Освещенность:</TextUI>
-          <SwitchUI value={false} />
+          <SwitchUI<SettingsFormType> name="photo" control={control} />
         </StackUI>
       </StackUI>
 
@@ -72,16 +71,22 @@ export const SettingsForm: FC<SettingsFormProps> = ({ settings }) => {
           name="controlTemperature"
           control={control}
           label={'Контрольная температура (\u00B0C):'}
+          keyboardOptions={{ keyboardType: 'number' }}
+          required
         />
         <InputUI<SettingsFormType>
           name="controlTime"
           control={control}
           label="Контрольное время (сек):"
+          keyboardOptions={{ keyboardType: 'number' }}
+          required
         />
         <InputUI<SettingsFormType>
           name="runningTime"
           control={control}
           label="Время работы мотора (сек):"
+          keyboardOptions={{ keyboardType: 'number' }}
+          required
         />
       </StackUI>
 
@@ -91,16 +96,22 @@ export const SettingsForm: FC<SettingsFormProps> = ({ settings }) => {
           name="waterPressure"
           control={control}
           label="Давление воды (max: 225):"
+          keyboardOptions={{ keyboardType: 'number' }}
+          required
         />
         <InputUI<SettingsFormType>
           name="soilDry"
           control={control}
           label="Мокрая почва (max: 3500):"
+          keyboardOptions={{ keyboardType: 'number' }}
+          required
         />
         <InputUI<SettingsFormType>
           name="soilWet"
           control={control}
           label="Сухая почва (min: 2920):"
+          keyboardOptions={{ keyboardType: 'number' }}
+          required
         />
       </StackUI>
 
@@ -108,7 +119,10 @@ export const SettingsForm: FC<SettingsFormProps> = ({ settings }) => {
         <TextUI variant="subtitle">Рабочие часы:</TextUI>
         <StackUI style={styles.sensor} spacing={2}>
           <TextUI>Активно:</TextUI>
-          <SwitchUI value={settings.workingHours.isEnabled} />
+          <SwitchUI<SettingsFormType>
+            name="workingHoursAktive"
+            control={control}
+          />
         </StackUI>
 
         {settings.workingHours.isEnabled && (
@@ -120,11 +134,13 @@ export const SettingsForm: FC<SettingsFormProps> = ({ settings }) => {
                   <InputUI<SettingsFormType>
                     name="startHour"
                     control={control}
+                    keyboardOptions={{ keyboardType: 'number' }}
                   />
                   <TextUI variant="title">:</TextUI>
                   <InputUI<SettingsFormType>
                     name="startMinute"
                     control={control}
+                    keyboardOptions={{ keyboardType: 'number' }}
                   />
                 </StackUI>
               )}
@@ -134,11 +150,16 @@ export const SettingsForm: FC<SettingsFormProps> = ({ settings }) => {
               <TextUI>Окончание:</TextUI>
               {settings.workingHours.end && (
                 <StackUI direction="row" spacing={2} alignItems="center">
-                  <InputUI<SettingsFormType> name="endHour" control={control} />
+                  <InputUI<SettingsFormType>
+                    name="endHour"
+                    control={control}
+                    keyboardOptions={{ keyboardType: 'number' }}
+                  />
                   <TextUI variant="title">:</TextUI>
                   <InputUI<SettingsFormType>
                     name="endMinute"
                     control={control}
+                    keyboardOptions={{ keyboardType: 'number' }}
                   />
                 </StackUI>
               )}
@@ -148,18 +169,10 @@ export const SettingsForm: FC<SettingsFormProps> = ({ settings }) => {
       </StackUI>
 
       <StackUI direction="row" spacing={4}>
-        <ButtonUI
-          onClick={() => router.back()}
-          colors={{ containerColor: ButtonColor.ERROR }}
-        >
+        <ButtonUI onClick={() => router.back()} type="error">
           Отмена
         </ButtonUI>
-        <ButtonUI
-          onClick={handleSubmit(onSubmit)}
-          colors={{ containerColor: ButtonColor.PRIMARY }}
-        >
-          Сохранить
-        </ButtonUI>
+        <ButtonUI onClick={handleSubmit(onSubmit)}>Сохранить</ButtonUI>
       </StackUI>
     </StackUI>
   );

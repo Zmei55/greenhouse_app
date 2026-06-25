@@ -1,7 +1,8 @@
-import { PrimaryColor, TintColor } from '@/constants/theme';
+import { PrimaryColor } from '@/constants/theme';
 import {
   Host,
   OutlinedTextField,
+  OutlinedTextFieldProps,
   useNativeState,
 } from '@expo/ui/jetpack-compose';
 import { border } from '@expo/ui/jetpack-compose/modifiers';
@@ -11,16 +12,18 @@ import { StyleSheet } from 'react-native';
 import { StackUI } from '../StackUI';
 import { TextUI } from '../TextUI';
 
-interface InputProps<T extends FieldValues> {
+interface InputProps<T extends FieldValues> extends OutlinedTextFieldProps {
   name: Path<T>;
   label?: string;
   control?: Control<T>;
+  required?: boolean;
 }
 
 export function InputUI<T extends FieldValues>({
   name,
   label,
   control,
+  required = false,
   ...rest
 }: InputProps<T>) {
   const {
@@ -29,32 +32,37 @@ export function InputUI<T extends FieldValues>({
   } = useController({
     name,
     control,
-    rules: { required: true },
+    rules: { required },
   });
 
   return (
     <StackUI>
-      {label && <TextUI>{label}</TextUI>}
+      {label && (
+        <StackUI direction="row" spacing={2}>
+          <TextUI>{label}</TextUI>
+          <TextUI>*</TextUI>
+        </StackUI>
+      )}
       <Host style={{ flex: 1, height: 60 }}>
         <OutlinedTextField
           value={useNativeState(field.value)}
           onValueChange={field.onChange}
-          textStyle={styles.text}
+          textStyle={styles.textInput}
           modifiers={[border(1, PrimaryColor.DEFAULT)]}
           {...rest}
         />
       </Host>
-      {error && <TextUI style={styles.errorText}>{error.message}</TextUI>}
+      {error && (
+        <TextUI variant="caption" textColor="error">
+          {error.message}
+        </TextUI>
+      )}
     </StackUI>
   );
 }
 
 const styles = StyleSheet.create({
-  text: {
+  textInput: {
     fontSize: 24,
-  },
-  errorText: {
-    fontSize: 12,
-    color: TintColor.ERROR,
   },
 });
