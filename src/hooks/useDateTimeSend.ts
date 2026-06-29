@@ -1,5 +1,5 @@
 import { useAppDispatch } from '@/hooks/useAppDispatch';
-import { deviceDateTimeSave } from '@/redux/app';
+import { deviceDateTimeSave, errorSave } from '@/redux/app';
 import { useSendDeviceDateTimeMutation } from '@/redux/time/time.api';
 import { DateTimeFormType, DateTimeSendType } from '@/types';
 
@@ -24,8 +24,10 @@ export const useDateTimeSend = () => {
       const res = await sendDateTime(dateTimeArray).unwrap();
       dispatch(deviceDateTimeSave(res.deviceDateTime));
       if (callback) callback();
-    } catch (error) {
-      console.error('useDateTimeSend: ', error);
+    } catch {
+      dispatch(
+        errorSave('При попытке изменить настройку часов, произошла ошибка')
+      );
     }
   }
 

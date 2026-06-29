@@ -8,6 +8,7 @@
 /** Тип состояния основных данных приложения */
 export type AppStateType = LoginResponseType & {
   deviceDateTime: string | null;
+  error: string | null;
 };
 
 /** Тип ответа, которое получает приложение, если оно подключилось к устройству */

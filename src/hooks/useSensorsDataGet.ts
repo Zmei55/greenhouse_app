@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import { useAppDispatch } from '@/hooks/useAppDispatch';
-import { deviceDateTimeSave } from '@/redux/app';
+import { deviceDateTimeSave, errorSave } from '@/redux/app';
 import { useLazyGetAllQuery } from '@/redux/app/app.api';
 import { AllSensorsDataType } from '@/types';
 
@@ -19,8 +19,10 @@ export const useSensorsDataGet = () => {
         dispatch(deviceDateTimeSave(res.deviceDateTime));
       }
       setSensorsData(res);
-    } catch (error) {
-      console.error('useSensorsDataGet', error);
+    } catch {
+      dispatch(
+        errorSave('При попытке получить данные датчиков, произошла ошибка')
+      );
     }
   }
 

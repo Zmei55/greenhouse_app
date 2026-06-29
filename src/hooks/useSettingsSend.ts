@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 
 import { useAppDispatch } from '@/hooks/useAppDispatch';
+import { errorSave } from '@/redux/app';
 import { isSettingsLoadingSave, settingsSave } from '@/redux/settings';
 import { useSendSettingsMutation } from '@/redux/settings/settings.api';
 import { SettingsFormType, SettingsType } from '@/types/settings.types';
@@ -53,8 +54,12 @@ export const useSettingsSend = () => {
     try {
       const res = await send(dataWithoutSpaces).unwrap();
       dispatch(settingsSave(res));
-    } catch (error) {
-      console.error('useSettingsSend: ', error);
+    } catch {
+      dispatch(
+        errorSave(
+          'При попытке сохранить настройки устройства, произошла ошибка'
+        )
+      );
     }
   }
 

@@ -5,6 +5,7 @@ import { AppStateType } from '@/types';
 const initialState: AppStateType = {
   isLogged: false,
   deviceDateTime: null,
+  error: null,
 };
 
 const appSlice = createSlice({
@@ -20,6 +21,12 @@ const appSlice = createSlice({
     deviceDateTimeSave: (state, action: PayloadAction<string>) => {
       state.deviceDateTime = action.payload;
     },
+    errorSave: (state, action: PayloadAction<string>) => {
+      state.error = action.payload;
+    },
+    errorReset: state => {
+      state.error = initialState.error;
+    },
   },
   extraReducers: builder => {
     builder.addCase('app/logoutSuccess', () => {
@@ -28,7 +35,12 @@ const appSlice = createSlice({
   },
 });
 
-export const { loginSuccess, logoutSuccess, deviceDateTimeSave } =
-  appSlice.actions;
+export const {
+  loginSuccess,
+  logoutSuccess,
+  deviceDateTimeSave,
+  errorSave,
+  errorReset,
+} = appSlice.actions;
 
 export default appSlice.reducer;

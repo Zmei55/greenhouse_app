@@ -1,22 +1,41 @@
 import { Ionicons } from '@react-native-vector-icons/ionicons';
 import { Tabs } from 'expo-router';
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
 
-import { StackUI, TextUI } from '@/components/ui';
+import { ModalUI, StackUI, TextUI } from '@/components/ui';
 import { PrimaryColor, TintColor } from '@/constants/theme';
-import { useAppSelector, useLogin } from '@/hooks';
-import { isLoggedSelector } from '@/redux/app';
+import { useAppDispatch, useAppSelector, useLogin } from '@/hooks';
+import { errorReset, errorSelector, isLoggedSelector } from '@/redux/app';
 
 const TabLayout: FC = () => {
+  const dispatch = useAppDispatch();
   const isLogged = useAppSelector(isLoggedSelector);
+  const errorApp = useAppSelector(errorSelector);
   const { handleLogin, isLoginLoading } = useLogin();
+
+  const [isErrorModalVisible, setIsErrorModalVisible] =
+    useState<boolean>(false);
 
   useEffect(() => {
     if (!isLogged) {
       handleLogin();
     }
   }, [isLogged, handleLogin]);
+
+  useEffect(() => {
+    if (errorApp) setIsErrorModalVisible(true);
+  }, [errorApp]);
+
+  /**
+   * Вызывается при закрытии модального окна ошибок "приложения"
+   * - очищает состояние ошибки
+   * - закрывает модальное окно
+   */
+  function onErrorModalClose() {
+    dispatch(errorReset());
+    setIsErrorModalVisible(false);
+  }
 
   return (
     <>
@@ -67,6 +86,12 @@ const TabLayout: FC = () => {
           />
         </Tabs>
       )}
+
+      {errorApp && (
+        <ModalUI isVisible={isErrorModalVisible} onClose={onErrorModalClose}>
+          <StackUI style={styles.errorContainer}>{errorApp}</StackUI>
+        </ModalUI>
+      )}
     </>
   );
 };
@@ -84,5 +109,9 @@ const styles = StyleSheet.create({
   },
   tabBar: {
     backgroundColor: '#25292e',
+  },
+  errorContainer: {
+    paddingTop: 10,
+    paddingBottom: 10,
   },
 });
