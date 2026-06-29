@@ -2,6 +2,7 @@ import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen'; // Заставка на экране во время зарузки приложения | настройка в app.json
 import { useEffect } from 'react';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider } from 'react-redux';
 
@@ -24,16 +25,18 @@ const RootLayout = () => {
   if (!loaded) return null;
 
   return (
-    <Provider store={store}>
-      <SafeAreaProvider>
-        <Stack>
-          <Stack.Screen
-            name="(tabs)"
-            options={{ headerShown: false, statusBarStyle: 'light' }}
-          />
-        </Stack>
-      </SafeAreaProvider>
-    </Provider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <Provider store={store}>
+        <SafeAreaProvider>
+          <Stack>
+            <Stack.Screen
+              name="(tabs)"
+              options={{ headerShown: false, statusBarStyle: 'light' }}
+            />
+          </Stack>
+        </SafeAreaProvider>
+      </Provider>
+    </GestureHandlerRootView>
   );
 };
 

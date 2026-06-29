@@ -17,7 +17,11 @@ export const IconButtonUI: React.FC<IconButtonUIProps> = ({
   return (
     <Host matchContents>
       <IconButton onClick={rest.onClick}>
-        <Ionicons name={ioniconsName} size={iconsSize} />
+        <Ionicons
+          name={ioniconsName}
+          color={rest.colors?.contentColor}
+          size={iconsSize}
+        />
       </IconButton>
     </Host>
   );

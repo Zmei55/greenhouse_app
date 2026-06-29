@@ -1,10 +1,11 @@
 import { FC, useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { ActivityIndicator, ScrollView, StyleSheet, View } from 'react-native';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Clock, ClockSettingsForm } from '@/components';
 import { ButtonUI, StackUI, TextUI } from '@/components/ui';
+import { PrimaryColor } from '@/constants/theme';
 import { useSensorsDataGet } from '@/hooks';
 
 const Index: FC = () => {
@@ -16,19 +17,34 @@ const Index: FC = () => {
 
   useEffect(() => {
     handleSensorsDataGetting();
-  }, []);
+  }, [handleSensorsDataGetting]);
+
+  const handleSwipeData = (translationY: number) => {
+    if (translationY > 200) {
+      handleSensorsDataGetting();
+    }
+  };
+
+  const reloadScreen = Gesture.Pan()
+    .activeOffsetY(10)
+    .runOnJS(true) // <-- Указывает Gesture Handler выполнять колбэки в JS, а не на UI
+    .onUpdate(event => {
+      // Вызываем как обычную функцию, scheduleOnRN / runOnJS больше не нужны
+      handleSwipeData(event.translationY);
+    });
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <View
-        style={[
-          styles.container,
-          { paddingTop: insets.top - 40, paddingBottom: insets.bottom },
-        ]}
-      >
+    <View
+      style={[
+        styles.container,
+        { paddingTop: insets.top - 40, paddingBottom: insets.bottom },
+      ]}
+    >
+      <GestureDetector gesture={reloadScreen}>
         <ScrollView>
           {isSensorsDataLoading && (
             <StackUI style={styles.spinnerContainer}>
+              <ActivityIndicator size={80} color={PrimaryColor.DEFAULT} />
               <TextUI>Получение данных...</TextUI>
             </StackUI>
           )}
@@ -76,8 +92,8 @@ const Index: FC = () => {
             </StackUI>
           )}
         </ScrollView>
-      </View>
-    </GestureHandlerRootView>
+      </GestureDetector>
+    </View>
   );
 };
 
@@ -93,7 +109,7 @@ const styles = StyleSheet.create({
   /** Контейнер для спинера */
   spinnerContainer: {
     flex: 1,
-    height: 700,
+    height: 500,
     alignItems: 'center',
     justifyContent: 'center',
   },

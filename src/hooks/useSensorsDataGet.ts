@@ -12,6 +12,7 @@ export const useSensorsDataGet = () => {
   );
   const [getData, { isFetching: isSensorsDataLoading }] = useLazyGetAllQuery();
 
+  /** Получение данных датчиков */
   async function handleSensorsDataGetting() {
     try {
       const res = await getData().unwrap();

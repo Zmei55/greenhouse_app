@@ -24,19 +24,30 @@ export const ModalUI: FC<ModalUIProps> = ({
 }) => {
   return (
     <StackUI>
-      <Modal animationType="slide" transparent={true} visible={isVisible}>
+      <Modal
+        animationType="slide"
+        visible={isVisible}
+        backdropColor={'#0000004d'}
+      >
         {title && (
-          <StackUI style={styles.headerWithTitle}>
+          <StackUI
+            style={[styles.modal, styles.header, styles.headerWithTitle]}
+          >
             <TextUI variant="title">{title}</TextUI>
             <CloseButton onClose={onClose} />
           </StackUI>
         )}
         {!title && (
-          <StackUI style={styles.headerWithoutTitle}>
+          <StackUI
+            style={[styles.modal, styles.header, styles.headerWithoutTitle]}
+          >
             <CloseButton onClose={onClose} />
           </StackUI>
         )}
-        {children}
+        <StackUI style={[styles.modal, styles.body]}>
+          {typeof children === 'string' && <TextUI>{children}</TextUI>}
+          {typeof children !== 'string' && children}
+        </StackUI>
       </Modal>
     </StackUI>
   );
@@ -47,17 +58,36 @@ const CloseButton: FC<CloseButtonProps> = ({ onClose }) => {
     <IconButtonUI
       ioniconsName="close-outline"
       onClick={onClose}
-      colors={{ contentColor: TintColor.ERROR }}
+      colors={{
+        contentColor: TintColor.ERROR,
+      }}
     />
   );
 };
 
 const styles = StyleSheet.create({
+  modal: {
+    marginHorizontal: 10,
+    backgroundColor: '#fff',
+  },
+  header: {
+    flexDirection: 'row',
+    marginTop: 100,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+  },
   headerWithTitle: {
     justifyContent: 'space-between',
     alignItems: 'center',
+    paddingLeft: 20,
   },
   headerWithoutTitle: {
     justifyContent: 'flex-end',
+  },
+  body: {
+    paddingBottom: 20,
+    paddingLeft: 20,
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
   },
 });

@@ -3,7 +3,7 @@ import { Tabs } from 'expo-router';
 import { FC, useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
 
-import { ModalUI, StackUI, TextUI } from '@/components/ui';
+import { ModalUI } from '@/components/ui';
 import { PrimaryColor, TintColor } from '@/constants/theme';
 import { useAppDispatch, useAppSelector, useLogin } from '@/hooks';
 import { errorReset, errorSelector, isLoggedSelector } from '@/redux/app';
@@ -12,7 +12,7 @@ const TabLayout: FC = () => {
   const dispatch = useAppDispatch();
   const isLogged = useAppSelector(isLoggedSelector);
   const errorApp = useAppSelector(errorSelector);
-  const { handleLogin, isLoginLoading } = useLogin();
+  const { handleLogin } = useLogin();
 
   const [isErrorModalVisible, setIsErrorModalVisible] =
     useState<boolean>(false);
@@ -39,59 +39,49 @@ const TabLayout: FC = () => {
 
   return (
     <>
-      {!isLogged && isLoginLoading && (
-        <StackUI style={styles.container}>
-          <TextUI>Поиск теплицы...</TextUI>
-        </StackUI>
-      )}
-
-      {isLogged && !isLoginLoading && (
-        <Tabs
-          screenOptions={{
-            headerShadowVisible: false,
-            headerTintColor: TintColor.WHITE,
-            headerStyle: styles.header,
-            headerTitleAlign: 'center',
-            tabBarActiveTintColor: PrimaryColor.DEFAULT,
-            tabBarInactiveTintColor: TintColor.WHITE,
-            tabBarStyle: styles.tabBar,
+      <Tabs
+        screenOptions={{
+          headerShadowVisible: false,
+          headerTintColor: TintColor.WHITE,
+          headerStyle: styles.header,
+          headerTitleAlign: 'center',
+          tabBarActiveTintColor: PrimaryColor.DEFAULT,
+          tabBarInactiveTintColor: TintColor.WHITE,
+          tabBarStyle: styles.tabBar,
+        }}
+      >
+        <Tabs.Screen
+          name="index"
+          options={{
+            title: 'Теплица',
+            tabBarLabel: 'Домашняя',
+            tabBarIcon: ({ color, focused }) => (
+              <Ionicons
+                name={focused ? 'home-sharp' : 'home-outline'}
+                color={color}
+                size={24}
+              />
+            ),
           }}
-        >
-          <Tabs.Screen
-            name="index"
-            options={{
-              title: 'Теплица',
-              tabBarLabel: 'Домашняя',
-              tabBarIcon: ({ color, focused }) => (
-                <Ionicons
-                  name={focused ? 'home-sharp' : 'home-outline'}
-                  color={color}
-                  size={24}
-                />
-              ),
-            }}
-          />
-          <Tabs.Screen
-            name="settings"
-            options={{
-              title: 'Настройки',
-              tabBarIcon: ({ color, focused }) => (
-                <Ionicons
-                  name={focused ? 'settings' : 'settings-outline'}
-                  color={color}
-                  size={24}
-                />
-              ),
-            }}
-          />
-        </Tabs>
-      )}
+        />
+        <Tabs.Screen
+          name="settings"
+          options={{
+            title: 'Настройки',
+            tabBarIcon: ({ color, focused }) => (
+              <Ionicons
+                name={focused ? 'settings' : 'settings-outline'}
+                color={color}
+                size={24}
+              />
+            ),
+          }}
+        />
+      </Tabs>
 
-      {errorApp && (
-        <ModalUI isVisible={isErrorModalVisible} onClose={onErrorModalClose}>
-          <StackUI style={styles.errorContainer}>{errorApp}</StackUI>
-        </ModalUI>
-      )}
+      <ModalUI isVisible={isErrorModalVisible} onClose={onErrorModalClose}>
+        {errorApp}
+      </ModalUI>
     </>
   );
 };
@@ -109,9 +99,5 @@ const styles = StyleSheet.create({
   },
   tabBar: {
     backgroundColor: '#25292e',
-  },
-  errorContainer: {
-    paddingTop: 10,
-    paddingBottom: 10,
   },
 });
