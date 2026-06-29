@@ -23,12 +23,12 @@ const Index: FC = () => {
       <View
         style={[
           styles.container,
-          { paddingTop: insets.top, paddingBottom: insets.bottom },
+          { paddingTop: insets.top - 40, paddingBottom: insets.bottom },
         ]}
       >
         <ScrollView>
           {isSensorsDataLoading && (
-            <StackUI>
+            <StackUI style={styles.spinnerContainer}>
               <TextUI>Получение данных...</TextUI>
             </StackUI>
           )}
@@ -84,8 +84,18 @@ const Index: FC = () => {
 export default Index;
 
 const styles = StyleSheet.create({
+  /** Контейнер страницы */
   container: {
     flex: 1,
+    paddingLeft: 10,
+    paddingRight: 10,
+  },
+  /** Контейнер для спинера */
+  spinnerContainer: {
+    flex: 1,
+    height: 700,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   /** Контейнер для часов устройства */
   clockContainer: {
