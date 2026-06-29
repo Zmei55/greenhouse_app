@@ -40,7 +40,7 @@ export function InputUI<T extends FieldValues>({
       {label && (
         <StackUI direction="row" spacing={2}>
           <TextUI>{label}</TextUI>
-          <TextUI>*</TextUI>
+          <TextUI textColor="error">*</TextUI>
         </StackUI>
       )}
       <Host style={{ flex: 1, height: 60 }}>
