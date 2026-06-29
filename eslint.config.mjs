@@ -38,13 +38,14 @@ export default defineConfig({
     'no-console': 'warn',
     'no-unused-vars': 'off',
     'no-duplicate-imports': 'error',
+    'no-multiple-empty-lines': ['error', { max: 1, maxEOF: 1, maxBOF: 0 }],
     'sort-imports': [
       'error',
       {
         ignoreCase: false,
         ignoreDeclarationSort: true,
         ignoreMemberSort: true,
-        memberSyntaxSortOrder: ['none', 'all', 'multiple', 'single'],
+        memberSyntaxSortOrder: ['multiple', 'single', 'all', 'none'],
         allowSeparatedGroups: true,
       },
     ],
