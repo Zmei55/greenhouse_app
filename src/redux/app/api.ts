@@ -27,7 +27,7 @@ const baseQueryWithReAuth: BaseQueryFn<
 export const api = createApi({
   reducerPath: 'api',
   baseQuery: baseQueryWithReAuth,
-  tagTypes: ['auth', 'settings'],
+  tagTypes: ['auth', 'settings', 'time'],
   endpoints: () => ({}),
   refetchOnReconnect: true,
 });

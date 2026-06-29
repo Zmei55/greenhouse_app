@@ -21,4 +21,4 @@ const appApi = api.injectEndpoints({
   }),
 });
 
-export const { useLazyLoginQuery, useGetAllQuery } = appApi;
+export const { useLazyLoginQuery, useLazyGetAllQuery } = appApi;

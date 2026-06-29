@@ -1,6 +1,6 @@
 import { router } from 'expo-router';
 import { FC } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { StyleSheet } from 'react-native';
 
 import { ButtonUI, InputUI, StackUI, SwitchUI, TextUI } from '@/components/ui';
@@ -41,10 +41,6 @@ export const SettingsForm: FC<SettingsFormProps> = ({ settings }) => {
         : null,
     },
   });
-
-  const onSubmit: SubmitHandler<SettingsFormType> = data => {
-    handleSettingsSending(data);
-  };
 
   return (
     <StackUI spacing={6}>
@@ -172,7 +168,9 @@ export const SettingsForm: FC<SettingsFormProps> = ({ settings }) => {
         <ButtonUI onClick={() => router.back()} type="error">
           Отмена
         </ButtonUI>
-        <ButtonUI onClick={handleSubmit(onSubmit)}>Сохранить</ButtonUI>
+        <ButtonUI onClick={handleSubmit(handleSettingsSending)}>
+          Сохранить
+        </ButtonUI>
       </StackUI>
     </StackUI>
   );

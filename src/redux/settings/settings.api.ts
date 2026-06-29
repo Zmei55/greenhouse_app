@@ -1,8 +1,10 @@
-import { SettingsType } from '@/types/settings.types';
+import { SettingsType } from '@/types';
 import { api } from '../app/api';
 
+/** Управление настройками устройства */
 const settingsApi = api.injectEndpoints({
   endpoints: builder => ({
+    /** Получение всех настроек с устройства */
     getAllSettings: builder.query<SettingsType, void>({
       query: () => ({
         url: '/settings',
@@ -10,6 +12,7 @@ const settingsApi = api.injectEndpoints({
       }),
       providesTags: ['settings'],
     }),
+    /** Отправка новых настроек на устройство и получение нового объекта настроек в ответ */
     sendSettings: builder.mutation<SettingsType, SettingsType>({
       query: newSettings => ({
         url: '/settings',

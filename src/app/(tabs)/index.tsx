@@ -1,66 +1,65 @@
-import dayjs, { Dayjs } from 'dayjs';
 import { FC, useEffect, useState } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { StackUI, TextUI } from '@/components/ui';
-import { useGetAllQuery } from '@/redux/app/app.api';
-
-// import { allSensorsResponse as data } from '@/constants/data'; // удалить после завершения разработки
-
-const Clock: FC<{ dateTime: Dayjs }> = ({ dateTime }) => {
-  const [time, setTime] = useState<Dayjs>(dateTime);
-
-  useEffect(() => {
-    const timerId = setInterval(() => {
-      const newTime = time.add(1, 'seconds');
-      setTime(newTime);
-    }, 1000);
-
-    return () => clearInterval(timerId);
-  }, [time]);
-
-  const formattedTime = time.format('HH:mm');
-
-  return <TextUI variant="title">{formattedTime}</TextUI>;
-};
+import { Clock, ClockSettingsForm } from '@/components';
+import { ButtonUI, StackUI, TextUI } from '@/components/ui';
+import { useSensorsDataGet } from '@/hooks';
 
 const Index: FC = () => {
-  const { data, isFetching } = useGetAllQuery();
+  const { handleSensorsDataGetting, sensorsData, isSensorsDataLoading } =
+    useSensorsDataGet();
+  const [showClockSettings, setShowClockSettings] = useState<boolean>(false);
+
+  useEffect(() => {
+    handleSensorsDataGetting();
+  }, []);
 
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView>
-        {isFetching && (
+        {isSensorsDataLoading && (
           <StackUI>
             <TextUI>Получение данных...</TextUI>
           </StackUI>
         )}
 
-        {data && !isFetching && (
+        {sensorsData && !isSensorsDataLoading && (
           <StackUI spacing={4}>
-            <StackUI style={styles.watchContainer}>
-              <TextUI>
-                {data.deviceDateTime ? (
-                  <Clock dateTime={dayjs(data.deviceDateTime)} />
-                ) : (
-                  'Время устройства не установлено...'
+            <StackUI style={styles.clockContainer}>
+              <>
+                <StackUI alignItems="center">
+                  <Clock />
+                </StackUI>
+
+                {!showClockSettings && (
+                  <ButtonUI onClick={() => setShowClockSettings(true)}>
+                    Изменить
+                  </ButtonUI>
                 )}
-              </TextUI>
+
+                {showClockSettings && (
+                  <ClockSettingsForm
+                    setShowClockSettings={setShowClockSettings}
+                  />
+                )}
+              </>
             </StackUI>
 
             <StackUI>
               <TextUI>Влажность почвы:</TextUI>
               <TextUI>
-                {data.soilMoisture ? data.soilMoisture : 'Данных нет...'}
+                {sensorsData.soilMoisture
+                  ? sensorsData.soilMoisture
+                  : 'Данных нет...'}
               </TextUI>
             </StackUI>
 
             <StackUI>
               <TextUI>Температура воздуха:</TextUI>
               <TextUI>
-                {data.temperature
-                  ? parseFloat(data.temperature).toFixed(1) + ' \u00B0C'
+                {sensorsData.temperature
+                  ? parseFloat(sensorsData.temperature).toFixed(1) + ' \u00B0C'
                   : 'Данных нет...'}
               </TextUI>
             </StackUI>
@@ -81,8 +80,11 @@ const styles = StyleSheet.create({
     paddingRight: 10,
   },
   /** Контейнер для часов устройства */
-  watchContainer: {
+  clockContainer: {
     flex: 1,
-    alignItems: 'center',
+    // alignItems: 'center',
+  },
+  clock: {
+    fontSize: 80,
   },
 });

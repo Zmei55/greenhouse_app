@@ -4,10 +4,11 @@
  * Приложение - приложение, установленной на мобильное устройство, управляет настройками "Устройства"
  * Устройство - прибор, который находится в теплице и регулирует её работу
  */
-import { Dayjs } from 'dayjs';
 
 /** Тип состояния основных данных приложения */
-export type AppStateType = LoginResponseType;
+export type AppStateType = LoginResponseType & {
+  deviceDateTime: string | null;
+};
 
 /** Тип ответа, которое получает приложение, если оно подключилось к устройству */
 export type LoginResponseType = {
@@ -18,5 +19,5 @@ export type LoginResponseType = {
 export type AllSensorsDataType = {
   soilMoisture: number | null;
   temperature: string | null;
-  deviceDateTime: Dayjs | string | null;
+  deviceDateTime: string | null;
 };
