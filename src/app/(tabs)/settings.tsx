@@ -4,7 +4,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { SettingsForm } from '@/components';
-import { StackUI, TextUI } from '@/components/ui';
+import { SpinnerUI, StackUI, TextUI } from '@/components/ui';
 import { useAppSelector, useSettingsGet } from '@/hooks';
 import { isSettingsLoadingSelector, settingsSelector } from '@/redux/settings';
 
@@ -29,6 +29,7 @@ const SettingsScreen: React.FC = () => {
         <ScrollView>
           {isSettingsLoading && (
             <StackUI style={styles.spinnerContainer}>
+              <SpinnerUI size={80} />
               <TextUI>Получение настроек...</TextUI>
             </StackUI>
           )}

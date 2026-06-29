@@ -1,17 +1,11 @@
-import { useEffect } from 'react';
-
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { errorSave } from '@/redux/app';
-import { isSettingsLoadingSave, settingsSave } from '@/redux/settings';
+import { settingsSave } from '@/redux/settings';
 import { useLazyGetAllSettingsQuery } from '@/redux/settings/settings.api';
 
 export const useSettingsGet = () => {
   const dispatch = useAppDispatch();
-  const [get, { isFetching }] = useLazyGetAllSettingsQuery();
-
-  useEffect(() => {
-    dispatch(isSettingsLoadingSave(isFetching));
-  }, [dispatch, isFetching]);
+  const [get, { isFetching: isSettingsLoading }] = useLazyGetAllSettingsQuery();
 
   async function handleSettingsGetting() {
     try {
@@ -24,5 +18,5 @@ export const useSettingsGet = () => {
     }
   }
 
-  return { handleSettingsGetting };
+  return { handleSettingsGetting, isSettingsLoading };
 };

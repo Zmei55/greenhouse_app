@@ -1,11 +1,10 @@
 import { FC, useEffect, useState } from 'react';
-import { ActivityIndicator, ScrollView, StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Clock, ClockSettingsForm } from '@/components';
-import { ButtonUI, StackUI, TextUI } from '@/components/ui';
-import { PrimaryColor } from '@/constants/theme';
+import { ButtonUI, SpinnerUI, StackUI, TextUI } from '@/components/ui';
 import { useSensorsDataGet } from '@/hooks';
 
 const Index: FC = () => {
@@ -44,7 +43,7 @@ const Index: FC = () => {
         <ScrollView>
           {isSensorsDataLoading && (
             <StackUI style={styles.spinnerContainer}>
-              <ActivityIndicator size={80} color={PrimaryColor.DEFAULT} />
+              <SpinnerUI size={80} />
               <TextUI>Получение данных...</TextUI>
             </StackUI>
           )}
