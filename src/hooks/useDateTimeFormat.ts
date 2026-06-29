@@ -12,12 +12,10 @@ export const useDateTimeFormat = (dateTime: string | null) => {
   useEffect(() => {
     const timerId = setInterval(() => {
       if (DTForInitForm) {
-        const newTime = DTForInitForm.add(1, 'second')
-          .toISOString()
-          .slice(0, 19);
+        const newTime = DTForInitForm.add(1, 'second').format();
         dispatch(deviceDateTimeSave(newTime));
       }
-    }, 1000 * 60);
+    }, 1000);
 
     return () => clearInterval(timerId);
   }, [DTForInitForm, dispatch]);
