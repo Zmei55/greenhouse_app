@@ -1,18 +1,12 @@
-import { useEffect } from 'react';
-
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { errorSave } from '@/redux/app';
-import { isSettingsLoadingSave, settingsSave } from '@/redux/settings';
+import { settingsSave } from '@/redux/settings';
 import { useSendSettingsMutation } from '@/redux/settings/settings.api';
 import { SettingsFormType, SettingsType } from '@/types/settings.types';
 
 export const useSettingsSend = () => {
   const dispatch = useAppDispatch();
-  const [send, { isLoading }] = useSendSettingsMutation();
-
-  useEffect(() => {
-    dispatch(isSettingsLoadingSave(isLoading));
-  }, [dispatch, isLoading]);
+  const [send, { isLoading: isSettingsLoading }] = useSendSettingsMutation();
 
   async function handleSettingsSending(data: SettingsFormType) {
     /** Создаём новый объект настроек. Строки (необходимые для формы) возвращаем к цифрам */
@@ -63,5 +57,5 @@ export const useSettingsSend = () => {
     }
   }
 
-  return { handleSettingsSending };
+  return { handleSettingsSending, isSettingsLoading };
 };
