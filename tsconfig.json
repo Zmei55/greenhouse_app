@@ -4,7 +4,11 @@
     "strict": true,
     "paths": {
       "@/*": ["./src/*"],
-      "@/assets/*": ["./assets/*"]
+      "@/assets/*": ["./assets/*"],
+      "@/components/*": ["./src/components/*"],
+      "@/hooks/*": ["./src/hooks/*"],
+      "@/redux/*": ["./src/redux/*"],
+      "@/types/*": ["./src/types/*"]
     }
   },
   "include": [

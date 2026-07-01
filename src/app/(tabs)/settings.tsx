@@ -1,45 +1,37 @@
 import { useEffect } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { SettingsForm } from '@/components';
 import { SpinnerUI, StackUI, TextUI } from '@/components/ui';
 import { useAppSelector, useSettingsGet } from '@/hooks';
-import { isSettingsLoadingSelector, settingsSelector } from '@/redux/settings';
+import { settingsSelector } from '@/redux/settings';
 
 const SettingsScreen: React.FC = () => {
   const insets = useSafeAreaInsets();
   const settings = useAppSelector(settingsSelector);
-  const isSettingsLoading = useAppSelector(isSettingsLoadingSelector);
-  const { handleSettingsGetting } = useSettingsGet();
+  const { handleSettingsGetting, isSettingsLoading } = useSettingsGet();
 
   useEffect(() => {
     handleSettingsGetting();
   }, [handleSettingsGetting]);
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <View
-        style={[
-          styles.container,
-          { paddingTop: insets.top - 40, paddingBottom: insets.bottom },
-        ]}
-      >
-        <ScrollView>
-          {isSettingsLoading && (
-            <StackUI style={styles.spinnerContainer}>
-              <SpinnerUI size={80} />
-              <TextUI>Получение настроек...</TextUI>
-            </StackUI>
-          )}
+    <StackUI
+      style={[
+        styles.container,
+        { paddingTop: insets.top - 40, paddingBottom: insets.bottom },
+      ]}
+    >
+      {isSettingsLoading && (
+        <StackUI style={styles.spinnerContainer}>
+          <SpinnerUI size={80} />
+          <TextUI>Получение настроек...</TextUI>
+        </StackUI>
+      )}
 
-          {settings && !isSettingsLoading && (
-            <SettingsForm settings={settings} />
-          )}
-        </ScrollView>
-      </View>
-    </GestureHandlerRootView>
+      {settings && !isSettingsLoading && <SettingsForm settings={settings} />}
+    </StackUI>
   );
 };
 

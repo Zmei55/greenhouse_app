@@ -6,7 +6,6 @@
 /** Тип состояния настроек */
 export type SettingsStateType = {
   settings: SettingsType | null;
-  isSettingsLoading: boolean;
 };
 
 /** Тип ответа на запрос установленных настроек устройства */

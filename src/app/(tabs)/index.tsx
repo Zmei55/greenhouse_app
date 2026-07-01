@@ -1,6 +1,11 @@
 import { FC, useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
-import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import { ScrollView, StyleSheet } from 'react-native';
+import {
+  Gesture,
+  GestureDetector,
+  GestureHandlerRootView,
+} from 'react-native-gesture-handler';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Clock, ClockSettingsForm } from '@/components';
@@ -33,66 +38,71 @@ const Index: FC = () => {
     });
 
   return (
-    <View
-      style={[
-        styles.container,
-        { paddingTop: insets.top - 40, paddingBottom: insets.bottom },
-      ]}
-    >
-      <GestureDetector gesture={reloadScreen}>
-        <ScrollView>
-          {isSensorsDataLoading && (
-            <StackUI style={styles.spinnerContainer}>
-              <SpinnerUI size={80} />
-              <TextUI>Получение данных...</TextUI>
-            </StackUI>
-          )}
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <StackUI
+        style={[
+          styles.container,
+          { paddingTop: insets.top - 40, paddingBottom: insets.bottom },
+        ]}
+      >
+        {isSensorsDataLoading && (
+          <StackUI style={styles.spinnerContainer}>
+            <SpinnerUI size={80} />
+            <TextUI>Получение данных...</TextUI>
+          </StackUI>
+        )}
 
-          {sensorsData && !isSensorsDataLoading && (
-            <StackUI spacing={4}>
-              <StackUI style={styles.clockContainer}>
-                <>
-                  <StackUI alignItems="center">
-                    <Clock />
+        {sensorsData && !isSensorsDataLoading && (
+          <GestureDetector gesture={reloadScreen}>
+            <KeyboardAwareScrollView>
+              <ScrollView
+                keyboardShouldPersistTaps="handled"
+                contentContainerStyle={{ flexGrow: 1 }}
+              >
+                <StackUI style={styles.body} spacing={4}>
+                  <StackUI>
+                    <StackUI alignItems="center">
+                      <Clock />
+                    </StackUI>
+
+                    {!showClockSettings && (
+                      <ButtonUI onClick={() => setShowClockSettings(true)}>
+                        Изменить
+                      </ButtonUI>
+                    )}
+
+                    {showClockSettings && (
+                      <ClockSettingsForm
+                        setShowClockSettings={setShowClockSettings}
+                      />
+                    )}
                   </StackUI>
 
-                  {!showClockSettings && (
-                    <ButtonUI onClick={() => setShowClockSettings(true)}>
-                      Изменить
-                    </ButtonUI>
-                  )}
+                  <StackUI>
+                    <TextUI>Влажность почвы:</TextUI>
+                    <TextUI>
+                      {sensorsData.soilMoisture
+                        ? sensorsData.soilMoisture
+                        : 'Данных нет...'}
+                    </TextUI>
+                  </StackUI>
 
-                  {showClockSettings && (
-                    <ClockSettingsForm
-                      setShowClockSettings={setShowClockSettings}
-                    />
-                  )}
-                </>
-              </StackUI>
-
-              <StackUI>
-                <TextUI>Влажность почвы:</TextUI>
-                <TextUI>
-                  {sensorsData.soilMoisture
-                    ? sensorsData.soilMoisture
-                    : 'Данных нет...'}
-                </TextUI>
-              </StackUI>
-
-              <StackUI>
-                <TextUI>Температура воздуха:</TextUI>
-                <TextUI>
-                  {sensorsData.temperature
-                    ? parseFloat(sensorsData.temperature).toFixed(1) +
-                      ' \u00B0C'
-                    : 'Данных нет...'}
-                </TextUI>
-              </StackUI>
-            </StackUI>
-          )}
-        </ScrollView>
-      </GestureDetector>
-    </View>
+                  <StackUI>
+                    <TextUI>Температура воздуха:</TextUI>
+                    <TextUI>
+                      {sensorsData.temperature
+                        ? parseFloat(sensorsData.temperature).toFixed(1) +
+                          ' \u00B0C'
+                        : 'Данных нет...'}
+                    </TextUI>
+                  </StackUI>
+                </StackUI>
+              </ScrollView>
+            </KeyboardAwareScrollView>
+          </GestureDetector>
+        )}
+      </StackUI>
+    </GestureHandlerRootView>
   );
 };
 
@@ -112,12 +122,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  /** Контейнер для часов устройства */
-  clockContainer: {
-    flex: 1,
-    // alignItems: 'center',
-  },
-  clock: {
-    fontSize: 80,
+  body: {
+    paddingBottom: 20,
   },
 });

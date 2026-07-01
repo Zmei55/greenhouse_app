@@ -1,9 +1,16 @@
 import { router } from 'expo-router';
-import { FC } from 'react';
-import { useForm } from 'react-hook-form';
-import { StyleSheet } from 'react-native';
+import { useForm, useWatch } from 'react-hook-form';
+import { ScrollView, StyleSheet } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 
-import { ButtonUI, InputUI, StackUI, SwitchUI, TextUI } from '@/components/ui';
+import {
+  ButtonUI,
+  InputUI,
+  SpinnerUI,
+  StackUI,
+  SwitchUI,
+  TextUI,
+} from '@/components/ui';
 import { useSettingsSend } from '@/hooks';
 import { SettingsFormType, SettingsType } from '@/types/settings.types';
 
@@ -11,8 +18,8 @@ interface SettingsFormProps {
   settings: SettingsType;
 }
 
-export const SettingsForm: FC<SettingsFormProps> = ({ settings }) => {
-  const { handleSettingsSending } = useSettingsSend();
+export const SettingsForm: React.FC<SettingsFormProps> = ({ settings }) => {
+  const { handleSettingsSending, isSettingsLoading } = useSettingsSend();
 
   /** Инициализируем форму. Цифры приводим к строкам для работы с <Input /> */
   const { control, handleSubmit } = useForm<SettingsFormType>({
@@ -42,143 +49,167 @@ export const SettingsForm: FC<SettingsFormProps> = ({ settings }) => {
     },
   });
 
+  const isWorkingHoursVisible = useWatch({
+    control,
+    name: 'workingHoursAktive',
+  });
+
   return (
-    <StackUI spacing={6}>
-      <StackUI style={styles.sensorsContainer}>
-        <TextUI variant="subtitle">Датчики:</TextUI>
-        <StackUI style={styles.sensor} spacing={2}>
-          <TextUI>Термометр:</TextUI>
-          <SwitchUI<SettingsFormType> name="temperature" control={control} />
-        </StackUI>
-
-        <StackUI style={styles.sensor} spacing={2}>
-          <TextUI>Влажность воздуха:</TextUI>
-          <SwitchUI<SettingsFormType> name="soilMoisture" control={control} />
-        </StackUI>
-
-        <StackUI style={styles.sensor} spacing={2}>
-          <TextUI>Освещенность:</TextUI>
-          <SwitchUI<SettingsFormType> name="photo" control={control} />
-        </StackUI>
-      </StackUI>
-
-      <StackUI spacing={2}>
-        <InputUI<SettingsFormType>
-          name="controlTemperature"
-          control={control}
-          label={'Контрольная температура (\u00B0C):'}
-          keyboardOptions={{ keyboardType: 'number' }}
-          required
-        />
-        <InputUI<SettingsFormType>
-          name="controlTime"
-          control={control}
-          label="Контрольное время (сек):"
-          keyboardOptions={{ keyboardType: 'number' }}
-          required
-        />
-        <InputUI<SettingsFormType>
-          name="runningTime"
-          control={control}
-          label="Время работы мотора (сек):"
-          keyboardOptions={{ keyboardType: 'number' }}
-          required
-        />
-      </StackUI>
-
-      <StackUI>
-        <TextUI variant="subtitle">Полив:</TextUI>
-        <InputUI<SettingsFormType>
-          name="waterPressure"
-          control={control}
-          label="Давление воды (max: 225):"
-          keyboardOptions={{ keyboardType: 'number' }}
-          required
-        />
-        <InputUI<SettingsFormType>
-          name="soilDry"
-          control={control}
-          label="Мокрая почва (max: 3500):"
-          keyboardOptions={{ keyboardType: 'number' }}
-          required
-        />
-        <InputUI<SettingsFormType>
-          name="soilWet"
-          control={control}
-          label="Сухая почва (min: 2920):"
-          keyboardOptions={{ keyboardType: 'number' }}
-          required
-        />
-      </StackUI>
-
-      <StackUI>
-        <TextUI variant="subtitle">Рабочие часы:</TextUI>
-        <StackUI style={styles.sensor} spacing={2}>
-          <TextUI>Активно:</TextUI>
-          <SwitchUI<SettingsFormType>
-            name="workingHoursAktive"
-            control={control}
-          />
-        </StackUI>
-
-        {settings.workingHours.isEnabled && (
-          <StackUI>
-            <StackUI>
-              <TextUI>Начало:</TextUI>
-              {settings.workingHours.start && (
-                <StackUI direction="row" spacing={2} alignItems="center">
-                  <InputUI<SettingsFormType>
-                    name="startHour"
-                    control={control}
-                    keyboardOptions={{ keyboardType: 'number' }}
-                  />
-                  <TextUI variant="title">:</TextUI>
-                  <InputUI<SettingsFormType>
-                    name="startMinute"
-                    control={control}
-                    keyboardOptions={{ keyboardType: 'number' }}
-                  />
-                </StackUI>
-              )}
+    <KeyboardAwareScrollView>
+      <ScrollView
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={{ flexGrow: 1 }}
+      >
+        <StackUI style={styles.container} spacing={6}>
+          <StackUI style={styles.sensorsContainer}>
+            <TextUI variant="subtitle">Датчики:</TextUI>
+            <StackUI style={styles.sensor} spacing={2}>
+              <TextUI>Термометр:</TextUI>
+              <SwitchUI<SettingsFormType>
+                name="temperature"
+                control={control}
+              />
             </StackUI>
 
-            <StackUI>
-              <TextUI>Окончание:</TextUI>
-              {settings.workingHours.end && (
-                <StackUI direction="row" spacing={2} alignItems="center">
-                  <InputUI<SettingsFormType>
-                    name="endHour"
-                    control={control}
-                    keyboardOptions={{ keyboardType: 'number' }}
-                  />
-                  <TextUI variant="title">:</TextUI>
-                  <InputUI<SettingsFormType>
-                    name="endMinute"
-                    control={control}
-                    keyboardOptions={{ keyboardType: 'number' }}
-                  />
-                </StackUI>
-              )}
+            <StackUI style={styles.sensor} spacing={2}>
+              <TextUI>Влажность воздуха:</TextUI>
+              <SwitchUI<SettingsFormType>
+                name="soilMoisture"
+                control={control}
+              />
+            </StackUI>
+
+            <StackUI style={styles.sensor} spacing={2}>
+              <TextUI>Освещенность:</TextUI>
+              <SwitchUI<SettingsFormType> name="photo" control={control} />
             </StackUI>
           </StackUI>
-        )}
-      </StackUI>
 
-      <StackUI direction="row" spacing={4}>
-        <ButtonUI onClick={() => router.back()} type="error">
-          Отмена
-        </ButtonUI>
-        <ButtonUI onClick={handleSubmit(handleSettingsSending)}>
-          Сохранить
-        </ButtonUI>
-      </StackUI>
-    </StackUI>
+          <StackUI spacing={2}>
+            <InputUI<SettingsFormType>
+              name="controlTemperature"
+              control={control}
+              label={'Контрольная температура (\u00B0C):'}
+              keyboardOptions={{ keyboardType: 'number' }}
+              required
+            />
+            <InputUI<SettingsFormType>
+              name="controlTime"
+              control={control}
+              label="Контрольное время (сек):"
+              keyboardOptions={{ keyboardType: 'number' }}
+              required
+            />
+            <InputUI<SettingsFormType>
+              name="runningTime"
+              control={control}
+              label="Время работы мотора (сек):"
+              keyboardOptions={{ keyboardType: 'number' }}
+              required
+            />
+          </StackUI>
+
+          <StackUI>
+            <TextUI variant="subtitle">Полив:</TextUI>
+            <InputUI<SettingsFormType>
+              name="waterPressure"
+              control={control}
+              label="Давление воды (max: 225):"
+              keyboardOptions={{ keyboardType: 'number' }}
+              required
+            />
+            <InputUI<SettingsFormType>
+              name="soilDry"
+              control={control}
+              label="Мокрая почва (max: 3500):"
+              keyboardOptions={{ keyboardType: 'number' }}
+              required
+            />
+            <InputUI<SettingsFormType>
+              name="soilWet"
+              control={control}
+              label="Сухая почва (min: 2920):"
+              keyboardOptions={{ keyboardType: 'number' }}
+              required
+            />
+          </StackUI>
+
+          <StackUI>
+            <TextUI variant="subtitle">Рабочие часы:</TextUI>
+            <StackUI style={styles.sensor} spacing={2}>
+              <TextUI>Активно:</TextUI>
+              <SwitchUI<SettingsFormType>
+                name="workingHoursAktive"
+                control={control}
+              />
+            </StackUI>
+
+            {isWorkingHoursVisible && (
+              <StackUI>
+                <StackUI>
+                  <TextUI>Начало:</TextUI>
+                  <StackUI direction="row" spacing={2}>
+                    <InputUI<SettingsFormType>
+                      name="startHour"
+                      control={control}
+                      label="Часы:"
+                      keyboardOptions={{ keyboardType: 'number' }}
+                      required
+                    />
+                    <TextUI variant="title">:</TextUI>
+                    <InputUI<SettingsFormType>
+                      name="startMinute"
+                      control={control}
+                      label="Минуты:"
+                      keyboardOptions={{ keyboardType: 'number' }}
+                      required
+                    />
+                  </StackUI>
+                </StackUI>
+
+                <StackUI>
+                  <TextUI>Окончание:</TextUI>
+                  <StackUI direction="row" spacing={2} alignItems="center">
+                    <InputUI<SettingsFormType>
+                      name="endHour"
+                      control={control}
+                      label="Часы:"
+                      keyboardOptions={{ keyboardType: 'number' }}
+                      required
+                    />
+                    <TextUI variant="title">:</TextUI>
+                    <InputUI<SettingsFormType>
+                      name="endMinute"
+                      control={control}
+                      label="Минуты:"
+                      keyboardOptions={{ keyboardType: 'number' }}
+                      required
+                    />
+                  </StackUI>
+                </StackUI>
+              </StackUI>
+            )}
+          </StackUI>
+
+          <StackUI direction="row" spacing={4}>
+            <ButtonUI onClick={() => router.back()} type="error">
+              Отмена
+            </ButtonUI>
+            <ButtonUI onClick={handleSubmit(handleSettingsSending)}>
+              {isSettingsLoading ? <SpinnerUI size={'small'} /> : 'Сохранить'}
+            </ButtonUI>
+          </StackUI>
+        </StackUI>
+      </ScrollView>
+    </KeyboardAwareScrollView>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    marginBottom: 20,
+  },
   sensorsContainer: {
-    width: '100%',
     alignItems: 'center',
   },
   sensor: {

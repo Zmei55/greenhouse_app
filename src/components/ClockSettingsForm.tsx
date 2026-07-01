@@ -33,49 +33,51 @@ export const ClockSettingsForm: FC<ClockSettingsFormProps> = ({
   };
 
   return (
-    <StackUI spacing={2}>
-      <InputUI<DateTimeFormType>
-        name="year"
-        control={control}
-        label="Год"
-        keyboardOptions={{ keyboardType: 'number' }}
-        required
-      />
-      <InputUI<DateTimeFormType>
-        name="month"
-        control={control}
-        label="Месяц"
-        keyboardOptions={{ keyboardType: 'number' }}
-        required
-      />
-      <InputUI<DateTimeFormType>
-        name="day"
-        control={control}
-        label="День"
-        keyboardOptions={{ keyboardType: 'number' }}
-        required
-      />
-      <InputUI<DateTimeFormType>
-        name="hour"
-        control={control}
-        label="Час"
-        keyboardOptions={{ keyboardType: 'number' }}
-        required
-      />
-      <InputUI<DateTimeFormType>
-        name="minute"
-        control={control}
-        label="Минута"
-        keyboardOptions={{ keyboardType: 'number' }}
-        required
-      />
-      <InputUI<DateTimeFormType>
-        name="second"
-        control={control}
-        label="Секунда"
-        keyboardOptions={{ keyboardType: 'number' }}
-        required
-      />
+    <StackUI spacing={4}>
+      <StackUI spacing={2}>
+        <InputUI<DateTimeFormType>
+          name="year"
+          control={control}
+          label="Год"
+          keyboardOptions={{ keyboardType: 'number' }}
+          required
+        />
+        <InputUI<DateTimeFormType>
+          name="month"
+          control={control}
+          label="Месяц"
+          keyboardOptions={{ keyboardType: 'number' }}
+          required
+        />
+        <InputUI<DateTimeFormType>
+          name="day"
+          control={control}
+          label="День"
+          keyboardOptions={{ keyboardType: 'number' }}
+          required
+        />
+        <InputUI<DateTimeFormType>
+          name="hour"
+          control={control}
+          label="Час"
+          keyboardOptions={{ keyboardType: 'number' }}
+          required
+        />
+        <InputUI<DateTimeFormType>
+          name="minute"
+          control={control}
+          label="Минута"
+          keyboardOptions={{ keyboardType: 'number' }}
+          required
+        />
+        <InputUI<DateTimeFormType>
+          name="second"
+          control={control}
+          label="Секунда"
+          keyboardOptions={{ keyboardType: 'number' }}
+          required
+        />
+      </StackUI>
 
       <StackUI direction="row" spacing={4}>
         <ButtonUI type="error" onClick={() => setShowClockSettings(false)}>

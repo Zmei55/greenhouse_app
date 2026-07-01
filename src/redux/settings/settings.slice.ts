@@ -4,7 +4,6 @@ import { SettingsStateType, SettingsType } from '@/types';
 
 const initialState: SettingsStateType = {
   settings: null,
-  isSettingsLoading: false,
 };
 
 const settingsSlice = createSlice({
@@ -14,9 +13,6 @@ const settingsSlice = createSlice({
     settingsSave: (state, action: PayloadAction<SettingsType>) => {
       state.settings = action.payload;
     },
-    isSettingsLoadingSave: (state, action: PayloadAction<boolean>) => {
-      state.isSettingsLoading = action.payload;
-    },
   },
   extraReducers: builder => {
     builder.addCase('app/logoutSuccess', () => {
@@ -25,6 +21,6 @@ const settingsSlice = createSlice({
   },
 });
 
-export const { settingsSave, isSettingsLoadingSave } = settingsSlice.actions;
+export const { settingsSave } = settingsSlice.actions;
 
 export default settingsSlice.reducer;
