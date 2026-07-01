@@ -1,14 +1,13 @@
-import { PrimaryColor } from '@/constants/theme';
 import {
   Host,
   OutlinedTextField,
   OutlinedTextFieldProps,
   useNativeState,
 } from '@expo/ui/jetpack-compose';
-import { border } from '@expo/ui/jetpack-compose/modifiers';
 import { Control, FieldValues, Path, useController } from 'react-hook-form';
 import { StyleSheet } from 'react-native';
 
+import { PrimaryColor } from '@/constants/theme';
 import { StackUI } from '../StackUI';
 import { TextUI } from '../TextUI';
 
@@ -40,7 +39,7 @@ export function InputUI<T extends FieldValues>({
       {label && (
         <StackUI direction="row" spacing={2}>
           <TextUI>{label}</TextUI>
-          <TextUI textColor="error">*</TextUI>
+          {required && <TextUI textColor="error">*</TextUI>}
         </StackUI>
       )}
       <Host style={{ flex: 1, height: 60 }}>
@@ -48,7 +47,11 @@ export function InputUI<T extends FieldValues>({
           value={useNativeState(field.value)}
           onValueChange={field.onChange}
           textStyle={styles.textInput}
-          modifiers={[border(1, PrimaryColor.DEFAULT)]}
+          colors={{
+            focusedIndicatorColor: PrimaryColor.DEFAULT,
+            unfocusedIndicatorColor: PrimaryColor.DEFAULT,
+            disabledIndicatorColor: PrimaryColor.DISABLED,
+          }}
           {...rest}
         />
       </Host>
@@ -63,6 +66,7 @@ export function InputUI<T extends FieldValues>({
 
 const styles = StyleSheet.create({
   textInput: {
+    flex: 1,
     fontSize: 24,
   },
 });
